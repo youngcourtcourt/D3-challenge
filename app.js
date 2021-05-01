@@ -45,10 +45,10 @@ d3.csv("data.csv").then(function(data){
     })
 
 var xLinearScale=d3.scaleLinear()
-            .domain(d3.extent(data, d=>d.poverty))
+            .domain([8, d3.max(data, d=>d.poverty)])
             .range([0, chartWidth])
 var yLinearScale=d3.scaleLinear()
-    .domain(d3.extent(data, d=>d.smokes))
+    .domain([8,d3.max(data, d=>d.smokes)])
     .range([chartHeight, 0])
 
 var bottomAxis=d3.axisBottom(xLinearScale)
@@ -57,5 +57,16 @@ var leftAxis=d3.axisLeft(yLinearScale)
 
 chartGroup.append("g").attr("transform", `translate(0, ${chartHeight})`).call(bottomAxis)
 chartGroup.append("g").call(leftAxis)
+
+var circlesGroup=chartGroup.selectAll("circle")
+        .data(data)
+        .enter()
+        .append("circle")
+        .attr("cx", d=>xLinearScale(d.poverty))
+        .attr("cy", d=>yLinearScale(d.smokes))
+        .attr("r", "10")
+        .attr("fill", "blue")
+        .attr("stroke-width", "1")
+        .attr("stroke", "black")
 
 })
