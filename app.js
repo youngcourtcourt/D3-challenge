@@ -66,7 +66,22 @@ var circlesGroup=chartGroup.selectAll("circle")
         .attr("cy", d=>yLinearScale(d.smokes))
         .attr("r", "10")
         .attr("fill", "blue")
+        .attr("opacity", "0.5")
         .attr("stroke-width", "1")
         .attr("stroke", "black")
+
+
+var textGroup=chartGroup.selectAll("text")
+.data(data)
+.enter()
+.append("text")
+.attr("dx", d=>xLinearScale(d.poverty))
+.attr("dy", d=>yLinearScale(d.smokes))
+.text(d=>d.abbr)
+.attr("r", "10")
+.attr("font-size", 10)
+ 
+
+            
 
 })
