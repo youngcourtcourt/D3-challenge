@@ -75,6 +75,20 @@ var circlesGroup=chartGroup.selectAll("circle")
         .attr("stroke-width", "1")
         .attr("stroke", "black")
 
+chartGroup.append("text")
+    .attr("transform", `translate(${chartWidth/2}, ${chartHeight+margin.top-10})`)
+    .attr("text-anchor", "middle")
+    .attr("font-size", "25px")
+    .attr("fill", "black")
+    .text("Poverty %")
+
+chartGroup.append("text")
+.attr("transform", `translate(0, ${chartHeight/2})`)
+.attr("text-anchor", "middle")
+.attr("font-size", "25px")
+.attr("fill", "black")
+.text("Smokes %")
+
 
 var textGroup=chartGroup.selectAll("text")
 .data(data)
@@ -83,14 +97,14 @@ var textGroup=chartGroup.selectAll("text")
 .text(d=>d.abbr)
 .attr("x", d=>xLinearScale(d.poverty))
 .attr("y", d=>yLinearScale(d.smokes))
-.attr("r", "10")
+.attr("r", "5")
 .attr("font-size", 10)
  
 var toolTip=d3.tip()
         .attr("class", "d3-tip")
         .offset([0,-1])
         .html(function(d){
-            return(`<strong>State: ${d.state}<strong?<hr>Poverty:${d.poverty} Smokes: ${d.smokes}`)
+            return(`<strong>State: ${d.state}</strong><hr>Poverty: ${d.poverty} Smokes: ${d.smokes}`)
         })
 
 chartGroup.call(toolTip)
