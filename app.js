@@ -46,7 +46,7 @@ d3.csv("data.csv").then(function(data){
 
 
 var xLinearScale=d3.scaleLinear()
-            .domain([8, d3.max(data, d=>d.poverty)])
+            .domain([8, d3.max(data, d=>d.poverty)+1])
             .range([0, chartWidth])
 var yLinearScale=d3.scaleLinear()
     .domain([8,d3.max(data, d=>d.smokes)])
@@ -95,12 +95,14 @@ var toolTip=d3.tip()
 
 chartGroup.call(toolTip)
 
-circlesGroup.on("mouseover", d=>{
+circlesGroup.on("mouseover", function(d){
     toolTip.show(d,this)
 })
-.on("mouseout", d=>{
-    toolTip.hide(d)
+.on("mouseout", function(d){
+    toolTip.hide(d,this)
 })
+
+
             
 
 })
