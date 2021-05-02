@@ -23,8 +23,7 @@ var chartGroup=svg.append("g")
 
 
 d3.csv("data.csv").then(function(data){
-    console.log(data)
-
+    
     data.forEach(d=>{
 
         d.poverty= +d.poverty
@@ -43,6 +42,8 @@ d3.csv("data.csv").then(function(data){
         d.smokesLow= +d.smokesLow
         d.smokesHigh= +d.smokesHigh
     })
+    
+
 
 var xLinearScale=d3.scaleLinear()
             .domain([8, d3.max(data, d=>d.poverty)])
@@ -50,6 +51,10 @@ var xLinearScale=d3.scaleLinear()
 var yLinearScale=d3.scaleLinear()
     .domain([8,d3.max(data, d=>d.smokes)])
     .range([chartHeight, 0])
+
+// var scaleBand=d3.scaleBand()
+//         .domain(data, d=>d.abbr)
+//         .range([0,chartWidth])
 
 var bottomAxis=d3.axisBottom(xLinearScale)
 
@@ -75,13 +80,27 @@ var textGroup=chartGroup.selectAll("text")
 .data(data)
 .enter()
 .append("text")
-.attr("dx", d=>xLinearScale(d.poverty))
-.attr("dy", d=>yLinearScale(d.smokes))
 .text(d=>d.abbr)
+.attr("x", d=>xLinearScale(d.poverty))
+.attr("y", d=>yLinearScale(d.smokes))
 .attr("r", "10")
 .attr("font-size", 10)
  
+var toolTip=d3.tip()
+        .attr("class", "d3-tip")
+        .offset([0,-1])
+        .html(function(d){
+            return(`<strong>State: ${d.state}<strong?<hr>Poverty:${d.poverty} Smokes: ${d.smokes}`)
+        })
 
+chartGroup.call(toolTip)
+
+circlesGroup.on("mouseover", d=>{
+    toolTip.show(d,this)
+})
+.on("mouseout", d=>{
+    toolTip.hide(d)
+})
             
 
 })
