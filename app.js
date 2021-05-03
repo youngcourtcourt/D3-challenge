@@ -52,9 +52,6 @@ var yLinearScale=d3.scaleLinear()
     .domain([8,d3.max(data, d=>d.smokes)])
     .range([chartHeight, 0])
 
-// var scaleBand=d3.scaleBand()
-//         .domain(data, d=>d.abbr)
-//         .range([0,chartWidth])
 
 var bottomAxis=d3.axisBottom(xLinearScale)
 
@@ -75,6 +72,19 @@ var circlesGroup=chartGroup.selectAll("circle")
         .attr("stroke-width", "1")
         .attr("stroke", "black")
 
+
+var textGroup=chartGroup.selectAll(null)
+.data(data)
+.enter()
+.append("text")
+.attr("x", d=>xLinearScale(d.poverty))
+.attr("y", d=>yLinearScale(d.smokes))
+.text(d=>d.abbr)
+.attr("text-anchor", "middle")
+.attr("fill", "white")
+.attr("font-size", 11)
+.attr("font-weight", "bold")
+
 chartGroup.append("text")
     .attr("transform", `translate(${chartWidth/2}, ${chartHeight+margin.top-10})`)
     .attr("text-anchor", "middle")
@@ -90,17 +100,6 @@ chartGroup.append("text")
 .attr("font-size", "25px")
 .attr("fill", "black")
 .text("Smokes %")
-
-
-var textGroup=chartGroup.selectAll("text")
-.data(data)
-.enter()
-.append("text")
-.text(d=>d.abbr)
-.attr("x", d=>xLinearScale(d.poverty))
-.attr("y", d=>yLinearScale(d.smokes))
-.attr("r", "5")
-.attr("font-size", 10)
  
 var toolTip=d3.tip()
         .attr("class", "d3-tip")
