@@ -1,6 +1,8 @@
-// @TODO: YOUR CODE HERE!
+// Define SVG Width
 var svgWidth=960
 var svgHeight=500
+
+// Define margins
 
 var margin={
     top:60,
@@ -9,21 +11,30 @@ var margin={
     left:60
 }
 
+// Define width of chart
+
 var chartWidth=svgWidth-margin.left-margin.right
 var chartHeight=svgHeight-margin.top-margin.bottom
+
+// Select scatter section of index.html
 
 var svg=d3.select("#scatter")
         .append("svg")
         .attr("width", svgWidth)
         .attr("height", svgHeight)
 
+// Append group to scatter section and move it down the page
+
 var chartGroup=svg.append("g")
                 .attr("transform", `translate(${margin.left}, ${margin.top})`)
 
 
+// Read in csv
 
 d3.csv("data.csv").then(function(data){
     
+// Cast each value as integer
+
     data.forEach(d=>{
 
         d.poverty= +d.poverty
@@ -43,22 +54,28 @@ d3.csv("data.csv").then(function(data){
         d.smokesHigh= +d.smokesHigh
     })
     
-
+// Scale selected data to fit intended chart width and height
 
 var xLinearScale=d3.scaleLinear()
             .domain([8, d3.max(data, d=>d.poverty)+1])
             .range([0, chartWidth])
+
 var yLinearScale=d3.scaleLinear()
     .domain([8,d3.max(data, d=>d.smokes)])
     .range([chartHeight, 0])
 
+// Create axes using the scales we defined
 
 var bottomAxis=d3.axisBottom(xLinearScale)
 
 var leftAxis=d3.axisLeft(yLinearScale)
 
+// Append axes to chart
+
 chartGroup.append("g").attr("transform", `translate(0, ${chartHeight})`).call(bottomAxis)
 chartGroup.append("g").call(leftAxis)
+
+// Add circles to chart using our data to define positioning on page
 
 var circlesGroup=chartGroup.selectAll("circle")
         .data(data)
@@ -72,6 +89,7 @@ var circlesGroup=chartGroup.selectAll("circle")
         .attr("stroke-width", "1")
         .attr("stroke", "black")
 
+// Add state to circles, making sure to select "null" rather than "text" to guarantee that our enter() command always works
 
 var textGroup=chartGroup.selectAll(null)
 .data(data)
@@ -84,6 +102,8 @@ var textGroup=chartGroup.selectAll(null)
 .attr("fill", "white")
 .attr("font-size", 11)
 .attr("font-weight", "bold")
+
+// Add axis labels
 
 chartGroup.append("text")
     .attr("transform", `translate(${chartWidth/2}, ${chartHeight+margin.top-10})`)
@@ -100,6 +120,8 @@ chartGroup.append("text")
 .attr("font-size", "25px")
 .attr("fill", "black")
 .text("Smokes %")
+
+// Add tooltip
  
 var toolTip=d3.tip()
         .attr("class", "d3-tip")
@@ -117,7 +139,5 @@ circlesGroup.on("mouseover", function(d){
     toolTip.hide(d,this)
 })
 
-
-            
 
 })
